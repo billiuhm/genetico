@@ -1,0 +1,4 @@
+Place .cpp file into outer folder, and it will compile properly unless it is out of date.
+They won't be checked for being out of date because the tests are simple and easily understandable.
+
+For example test1.cpp is literally just testing if the image system works (and yes it's out of date).

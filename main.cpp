@@ -6,8 +6,8 @@
 #include <future>
 #include <thread>
 
-#include "tpool.hpp"
-#include "images.hpp"
+#include "libraries/tpool.hpp"
+#include "libraries/images.hpp"
 
 struct io_pair {
     std::string input;
@@ -100,3 +100,4 @@ int main() {
 
 
 }
+
