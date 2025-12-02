@@ -9,13 +9,9 @@
 #include "tpool.hpp"
 #include "images.hpp"
 
-struct unordered_map_val {
-    std::string s;
-    uint64_t i;
-
-    bool operator==(const unordered_map_val& other) const {
-        return s == other.s && i == other.i;
-    }
+struct io_pair {
+    std::string input;
+    image output;
 };
 
 threadPool tp(std::thread::hardware_concurrency());
@@ -60,20 +56,25 @@ int main() {
     imager img;
 
     // Training & Tokens combined into 1 hashmap
-    std::unordered_map<unordered_map_val, uint64_t> tokens_training = {
-        // Input,              Output,               Hash
-        {{ "grow",    static_cast<uint64_t>(+5)    },  0 },
-        {{ "shrink",  static_cast<uint64_t>(-5)    },  1 },
-        {{ "die",     static_cast<uint64_t>(-1000) },  2 },
-        {{ "godmode", static_cast<uint64_t>(+1000) },  3 }
-    };
+    std::unordered_map<io_pair, uint64_t> tokens_training;
 
-    
+    for (int i = 0; i < img.image_cardinal(); ++i) {
+        io_pair ip;
+        ip.output = img.get_image(i);
+        ip.input = ip.output.name;
+
+        tokens_training.emplace(ip, i);
+    }
 
     // Begin Neural Networks
     std::vector<NeuralNetwork> beings(start_size);
     std::vector<int> npl(layer_count);
-    for (int i = 0; i < layer_count; ++i) npl.emplace_back(neurons_per_layer);
+
+    npl.emplace_back(tokens_training.size());
+    for (int i = 1; i < layer_count - 1; ++i) npl.emplace_back(neurons_per_layer);
+    npl.emplace_back(tokens_training.size());
+
+    
     for (int i = 0; i < start_size; ++i) beings.emplace_back(NeuralNetwork(layer_count, npl));
 
     // Save memory
