@@ -46,7 +46,7 @@ public:
     }
 
     inline image get_image(size_t i) { return all_images[i]; }
-
+    inline size_t image_cardinal() { return all_images.size(); }
 
 private:
     threadPool tpool{std::thread::hardware_concurrency()};
