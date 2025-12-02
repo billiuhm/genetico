@@ -1,0 +1,2 @@
+The AI will only train on images; not text. There may be an implementation to fix this soon.
+It will simply ignore non-image files.
